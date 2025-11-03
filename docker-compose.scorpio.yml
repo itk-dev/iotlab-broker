@@ -1,0 +1,38 @@
+# https://github.com/ScorpioBroker/ScorpioBroker/blob/development-quarkus/compose-files/docker-compose-java-aaio.yml
+
+# version: '3'
+
+networks:
+  scorpio:
+
+services:
+  postgres:
+    image: postgis/postgis
+    # ports:
+    #   - "5432"
+    environment:
+      POSTGRES_USER: ngb
+      POSTGRES_PASSWORD: ngb
+      POSTGRES_DB: ngb
+    networks:
+      - scorpio
+
+  scorpio:
+    image: scorpiobroker/all-in-one-runner:java-latest
+    environment:
+      DBHOST: postgres
+    ports:
+      - "9090"
+    depends_on:
+      - postgres
+    labels:
+      - "traefik.enable=true"
+      - "traefik.docker.network=frontend"
+      - "traefik.http.routers.scorpio_${COMPOSE_PROJECT_NAME}.rule=Host(`scorpio.${COMPOSE_DOMAIN}`)"
+      # HTTPS config - uncomment to enable redirect from :80 to :443
+      - "traefik.http.routers.scorpio_${COMPOSE_PROJECT_NAME}.middlewares=redirect-to-https"
+      - "traefik.http.middlewares.redirect-to-https.redirectscheme.scheme=https"
+      - "traefik.http.services.scorpio_${COMPOSE_PROJECT_NAME}.loadbalancer.server.port=9090"
+    networks:
+      - scorpio
+      - frontend

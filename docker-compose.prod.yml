@@ -1,0 +1,10 @@
+services:
+  scorpio:
+    labels:
+      - "traefik.http.middlewares.redirect-to-https.redirectscheme.scheme=https"
+      - "traefik.http.routers.scorpio_${COMPOSE_PROJECT_NAME}-http.entrypoints=web"
+      - "traefik.http.routers.scorpio_${COMPOSE_PROJECT_NAME}-http.middlewares=redirect-to-https"
+      - "traefik.http.routers.scorpio_${COMPOSE_PROJECT_NAME}.entrypoints=websecure"
+      - "traefik.http.routers.scorpio_${COMPOSE_PROJECT_NAME}.rule=Host(`${COMPOSE_DOMAIN}`)"
+
+      - "traefik.http.routers.scorpio_${COMPOSE_PROJECT_NAME}.middlewares=ITKBasicAuth@file"
