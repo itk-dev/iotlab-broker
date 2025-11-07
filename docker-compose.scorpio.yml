@@ -27,6 +27,8 @@ services:
       POSTGRES_DB: ngb
     networks:
       - scorpio
+    volumes:
+      - .docker/data/scorpio-db:/var/lib/postgresql/data
 
   scorpio-nginx:
     image: nginxinc/nginx-unprivileged:alpine
