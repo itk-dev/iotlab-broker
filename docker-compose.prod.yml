@@ -1,4 +1,11 @@
 services:
+  scorpio:
+    # https://docs.docker.com/engine/containers/start-containers-automatically/#restart-policy-details
+    restart: "${SCORPIO_RESTART:-unless-stopped}"
+
+  scorpio-db:
+    restart: "${SCORPIO_RESTART:-unless-stopped}"
+
   scorpio-nginx:
     labels:
       - "traefik.http.middlewares.redirect-to-https.redirectscheme.scheme=https"
@@ -6,3 +13,4 @@ services:
       - "traefik.http.routers.scorpio_${COMPOSE_PROJECT_NAME}-http.middlewares=redirect-to-https"
       - "traefik.http.routers.scorpio_${COMPOSE_PROJECT_NAME}.entrypoints=websecure"
       - "traefik.http.routers.scorpio_${COMPOSE_PROJECT_NAME}.rule=Host(`${COMPOSE_DOMAIN}`)"
+    restart: "${SCORPIO_RESTART:-unless-stopped}"
