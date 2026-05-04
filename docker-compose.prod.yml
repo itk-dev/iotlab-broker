@@ -4,6 +4,8 @@ services:
     restart: "${SCORPIO_RESTART:-unless-stopped}"
 
   scorpio-db:
+    # deploy: deploy
+    user: "1042:1042"
     restart: "${SCORPIO_RESTART:-unless-stopped}"
 
   scorpio-nginx:
